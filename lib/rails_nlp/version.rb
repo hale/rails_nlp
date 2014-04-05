@@ -1,0 +1,3 @@
+module RailsNlp
+  VERSION = "0.0.1"
+end
