@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Philip Hale"]
   spec.email         = ["p.hale.09@aberdeen.ac.uk"]
   spec.summary       = "Supercharge your ActiveRecord text fields with NLP analysis."
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.description   = "Add Rails NLP to your Rails project to allow deeper full-text search across your ActiveRecord models."
   spec.homepage      = ""
   spec.license       = "TBC"
 
@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
 end
