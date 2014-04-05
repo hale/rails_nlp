@@ -92,20 +92,20 @@ module RailsNlp
 
     #   1) Analyse all the text fields and parse them into a frequency map of words. { <word_i> => <freq_i>, [...], <word_n> => <freq_n> }
     #   2) For each word in text, kw = Keyword.find_or_create_by_name(word).(i)
-    #   3) Create a new Wordcount row with :keyword_id => kw.id, :article_id => article.id and count as the frequency of the keyword in the article.
+    #   3) Create a new Wordcount row with :keyword_id => kw.id, :record_id => article.id and count as the frequency of the keyword in the article.
     def create_analysis
       text = collect_text
       text = clean(text)
       wordcounts = count_words(text)
       wordcounts.each do |word, frequency|
         kw = Keyword.find_or_create_by_name( word )
-        Wordcount.create!(:keyword_id => kw.id, :article_id => model.id,
+        Wordcount.create!(:keyword_id => kw.id, :record_id => model.id,
                           :count => frequency)
       end
     end
 
-    # 1) remove all wordcount rows for this article
-    # 2) treat the article as a new article
+    # 1) remove all wordcount rows for this record
+    # 2) treat the record as a new article
     # 3) remove keywords where keyword.id isn't present in column Wordcount#keyword_id
     def update_analysis
       model.wordcounts.destroy_all
@@ -113,7 +113,7 @@ module RailsNlp
       delete_orphaned_keywords
     end
 
-    # 1) remove all wordcount rows for this article
+    # 1) remove all wordcount rows for this record
     # 2) remove keywords where keyword.id isn't present in column Wordcount#keyword_id
     def destroy_analysis
       model.wordcounts.destroy_all

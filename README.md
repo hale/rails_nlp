@@ -21,9 +21,9 @@ Let's say you have the following blog post:
     3. Exercise! Research shows a healthy body leads to a healthy mind.
     4. Learn emergency phone numbers by heart.  This may save your life!
 
-The following queries should match this example article, but in your typical
+The following queries should match this example post, but in your typical
 full text search will fail because there is no direct match between the search
-terms and the text of the article:
+terms and the text of the post:
 
 * "benefits of eating cilantro".
 * "apps to help remember things"
@@ -39,7 +39,7 @@ queries without resorting to tags.
 * "remember" is a synonym of "memory".  Rails NLP matches queries against
   popular synonyms for keywords found in the text.
 * RailsNLP generates word stems and phonetic representations of the words in
-  your articles, so even when there are typos users still see results.
+  your posts, so even when there are typos users still see results.
 * If the search query contains words not found in the dictionary (or in the
   site), then a suggestion is offered from words that actually appear in the
   database.  This means relevant results: search suggestions will be relevant to
