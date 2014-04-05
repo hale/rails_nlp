@@ -7,11 +7,11 @@ Gem::Specification.new do |spec|
   spec.name          = "rails_nlp"
   spec.version       = RailsNlp::VERSION
   spec.authors       = ["Philip Hale"]
-  spec.email         = ["phil989@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
+  spec.email         = ["p.hale.09@aberdeen.ac.uk"]
+  spec.summary       = "Supercharge your ActiveRecord text fields with NLP analysis."
   spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.license       = "TBC"
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
