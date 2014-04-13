@@ -13,7 +13,7 @@ module RailsNlp
 
       private
 
-      alias_method :association, :file_name
+      alias_method :analysable, :file_name
 
     end
   end

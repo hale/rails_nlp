@@ -9,7 +9,7 @@ class CreateRailsNlpKeywordsAndWordcounts < ActiveRecord::Migration
       t.timestamps
     end
     create_table :wordcounts do |t|
-      t.integer :association_id
+      t.integer :analysable_id
       t.integer :keyword_id
       t.integer :count
 
