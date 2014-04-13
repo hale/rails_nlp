@@ -2,13 +2,14 @@ require 'spec_helper'
 
 module RailsNlp
   describe Configurator do
-    it "stores the model name" do
-      expect(Configurator.new(model_name: "Article").model_name).to eq("article")
+    it "can set the model name from other objects" do
+      Configurator.model_name = "book"
+      expect(Configurator.model_name).to eq("book")
     end
 
-    it "stores the fields on the model which are analysed" do
-      conf = Configurator.new(model_name: "", fields: [:title, :excerpt])
-      expect(conf.fields).to eq([:title, :excerpt])
+    it "can set the analysed fields from other objects" do
+      Configurator.fields = ["title", "author"]
+      expect(Configurator.fields).to eq(["title", "author"])
     end
   end
 end

@@ -1,10 +1,21 @@
 module RailsNlp
   class Configurator
-    attr_reader :model_name, :fields
 
-    def initialize(model_name: model_name, fields: fields)
-      @model_name = model_name.downcase
-      @fields = fields
+    def self.model_name=(model_name)
+      @@model_name = model_name
     end
+
+    def self.fields=(fields)
+      @@fields = fields
+    end
+
+    def self.model_name
+      @@model_name
+    end
+
+    def self.fields
+      @@fields
+    end
+
   end
 end
