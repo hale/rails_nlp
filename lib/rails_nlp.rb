@@ -1,6 +1,8 @@
 # encoding: UTF-8
 
 require 'rails_nlp/version'
+require 'rails_nlp/wordcount'
+require 'rails_nlp/keyword'
 
 module RailsNlp
 
