@@ -1,2 +1,4 @@
-RailsNlp::Configurator.model = "<%= analysable %>"
-RailsNlp::Configurator.fields = <%= fields %>
+RailsNlp.configure do |config|
+  config.model_name = "<%= analysable %>"
+  config.fields = <%= fields %>
+end
