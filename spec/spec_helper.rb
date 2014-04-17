@@ -25,9 +25,15 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord::Schema.define do
   self.verbose = false
 
+
+  create_table :wordcounts, force: true do |t|
+    t.integer "analysable_id"
+    t.integer "keyword_id"
+    t.integer "count"
+  end
+
   create_table :keywords, force: true do |t|
     t.string "name"
-    t.integer "analysable_id"
   end
 
   create_table :analysables, force: true do |t|

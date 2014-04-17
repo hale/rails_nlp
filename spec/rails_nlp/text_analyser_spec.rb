@@ -2,28 +2,25 @@ require 'spec_helper'
 
 module RailsNlp
   describe TextAnalyser do
-    it "fetches the fields from the config" do
-      analysable = create(:analysable)
-      flexmock(Configurator).should_receive(:fields).once.and_return(["title"])
-      TextAnalyser.analyse(analysable: analysable)
-    end
-
     describe "creating a keyword records" do
       it "creates a keyword record" do
-        analysable = create(:analysable)
-        expect{TextAnalyser.analyse(analysable: analysable)}.to change{Keyword.count}
+        expect{create(:analysable)}.to change{Keyword.count}
       end
 
-      it "keyword record contains id of model" do
-        analysable = create(:analysable)
-        TextAnalyser.analyse(analysable: analysable)
-        expect(Keyword.last.analysable_id).to eq(analysable.id)
+      it "is case insensitive" do
+        TextAnalyser.analyse(create(:analysable, title: "alpha", content: ""))
+        TextAnalyser.analyse(create(:analysable, title: "Alpha", content: ""))
+        expect(Keyword.pluck(:name)).to eq(["alpha"])
+      end
+
+      it "removes stop words" do
+        TextAnalyser.analyse(create(:analysable, title: "the dog is a good boy", content: ""))
+        expect(Keyword.pluck(:name)).to eq(%w(dog good boy))
       end
 
       it "Keyword#name for each keyword created is a word from analysable fields" do
-        analysable = create(:analysable, title: "Ray Mars", content: "The end")
-        TextAnalyser.analyse(analysable: analysable)
-        expect(Keyword.pluck(:name)).to eq(%w(Ray Mars The end))
+        create(:analysable, title: "Ray Mars", content: "The end")
+        expect(Keyword.pluck(:name)).to eq(%w(ray mars end))
       end
     end
   end
