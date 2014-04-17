@@ -19,8 +19,8 @@ module RailsNlp
   end
 
   included do
-    has_many :wordcounts, class_name: RailsNlp::Wordcount
-    has_many :keywords, through: :wordcounts, class_name: RailsNlp::Keyword
+    has_many :wordcounts, class_name: RailsNlp::Wordcount, foreign_key: "analysable_id"
+    has_many :keywords, through: :wordcounts, class_name: RailsNlp::Keyword, source: :analysable
 
     after_save :analyse_model
   end
