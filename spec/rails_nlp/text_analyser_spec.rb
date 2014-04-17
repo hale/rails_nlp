@@ -22,6 +22,11 @@ module RailsNlp
         create(:analysable, title: "Ray Mars", content: "The end")
         expect(Keyword.pluck(:name)).to eq(%w(ray mars end))
       end
+
+      it "skips a field if there is no content" do
+        create(:analysable, title: nil, content: "something")
+        expect(Keyword.count).to eq(1)
+      end
     end
   end
 end
