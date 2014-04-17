@@ -2,7 +2,7 @@ require 'active_record'
 
 module RailsNlp
   class Keyword < ActiveRecord::Base
-    #has_many :wordcounts
-    #has_many :analysables, through: :wordcounts
+    validates_presence_of :name
+    validates_uniqueness_of :name
   end
 end

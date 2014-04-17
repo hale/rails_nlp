@@ -1,4 +1,3 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rails_nlp/version'
@@ -25,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard", "~> 2.6"
   spec.add_development_dependency "guard-rspec", "~> 4.2.8"
   spec.add_development_dependency "flexmock", "~> 1.3.1"
+  spec.add_development_dependency "shoulda-matchers", "~> 2.6.0"#, require: false
 
   spec.add_runtime_dependency "facets", "~> 2.9"
   spec.add_runtime_dependency "sanitize", "~> 2.1"

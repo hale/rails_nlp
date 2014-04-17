@@ -1,7 +1,9 @@
 require_relative '../lib/rails_nlp'
 require_relative 'analysable'
+
 require 'factory_girl_rails'
 require_relative 'factories.rb'
+require 'shoulda/matchers'
 
 RSpec.configure do |config|
   config.order = "random"
