@@ -1,5 +1,5 @@
 require_relative '../lib/rails_nlp'
-require_relative 'analysable_mock'
+require_relative 'analysable'
 require 'factory_girl_rails'
 require_relative 'factories.rb'
 
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define do
     t.integer "analysable_id"
   end
 
-  create_table :analysable_mocks, force: true do |t|
+  create_table :analysables, force: true do |t|
     t.string "title"
     t.text "content"
   end

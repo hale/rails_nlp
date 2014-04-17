@@ -1,11 +1,11 @@
 module RailsNlp
   FactoryGirl.define do
-    factory :analysable_mock, class: AnalysableMock do |a|
+    factory :analysable, class: Analysable do |a|
       title "Title"
       content "Content"
 
       after(:create) do
-        Configurator.model_name = "analysable_mock"
+        Configurator.model_name = "analysable"
         Configurator.fields = ["title", "content"]
       end
     end
