@@ -1,3 +1,5 @@
+require 'sanitize'
+
 module RailsNlp
   class TextAnalyser
 
@@ -27,9 +29,16 @@ module RailsNlp
         "".tap do |str|
           @fields.each do |field|
             field_contents = @model.send(field)
-            str << " " + field_contents if field_contents
+            if field_contents
+              field_contents = sanitize_html(field_contents)
+              str << " " + field_contents
+            end
           end
         end
+      end
+
+      def sanitize_html(str)
+        Sanitize.clean(str)
       end
 
 

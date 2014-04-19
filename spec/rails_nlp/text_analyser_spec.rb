@@ -40,6 +40,19 @@ module RailsNlp
         TextAnalyser.new(model: @model, fields: [:title, :content]).analyse
         expect(Keyword.count).to eq(1)
       end
+
+      it "treats a tab as a separator" do
+        @model.should_receive(:content).and_return("tab\tdelimited\tstuff")
+        TextAnalyser.new(model: @model, fields: [:content]).analyse
+        expect(Keyword.pluck(:name)).to eq(%w(tab delimited stuff))
+      end
+
+      it "handles HTML" do
+        @model.should_receive(:content).and_return("<p>included</p><!-- excluded -->")
+        TextAnalyser.new(model: @model, fields: [:content]).analyse
+        expect(Keyword.pluck(:name)).to eq(["included"])
+      end
+
     end
   end
 end
