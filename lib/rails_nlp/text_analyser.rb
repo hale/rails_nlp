@@ -12,6 +12,7 @@ module RailsNlp
 
     def analyse
       model_text.split.each do |word|
+        next unless RailsNlp.spell_checker.correct?(word)
         word.downcase!
         next if STOP_WORDS.include?(word)
         kw = Keyword.find_or_create_by(name: word)

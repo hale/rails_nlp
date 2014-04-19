@@ -36,7 +36,7 @@ module RailsNlp
 
       it "skips a field if there is no content" do
         @model.should_receive(:title).and_return(nil)
-        @model.should_receive(:content).and_return("hulabaloo")
+        @model.should_receive(:content).and_return("hullabaloo")
         TextAnalyser.new(model: @model, fields: [:title, :content]).analyse
         expect(Keyword.count).to eq(1)
       end
@@ -51,6 +51,18 @@ module RailsNlp
         @model.should_receive(:content).and_return("<p>included</p><!-- excluded -->")
         TextAnalyser.new(model: @model, fields: [:content]).analyse
         expect(Keyword.pluck(:name)).to eq(["included"])
+      end
+
+      it "doesn't store words that are incorrectly spelled" do
+        @model.should_receive(:content).and_return("qweqweqwe")
+        TextAnalyser.new(model: @model, fields: [:content]).analyse
+        expect(Keyword.count).to eq(0)
+      end
+
+      it "doesn't store words containing punctuation" do
+        @model.should_receive(:content).and_return("\"Wow!\" shouted the man")
+        TextAnalyser.new(model: @model, fields: [:content]).analyse
+        expect(Keyword.pluck(:name)).to eq(%w(shouted man))
       end
 
     end

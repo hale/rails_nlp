@@ -3,6 +3,7 @@ require 'rails_nlp/configuration'
 require 'rails_nlp/text_analyser'
 require 'rails_nlp/keyword'
 require 'rails_nlp/wordcount'
+require 'rails_nlp/spell_checker'
 
 require 'active_support/concern'
 
@@ -33,5 +34,8 @@ module RailsNlp
     @text_analyser ||= TextAnalyser.new(model: self, fields: RailsNlp.configuration.fields)
   end
 
+  def self.spell_checker
+    @spell_checker ||= SpellChecker.new
+  end
 
 end
