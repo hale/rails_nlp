@@ -11,22 +11,25 @@ module RailsNlp
     end
 
     def analyse
-      model_text.split.each do |word|
-        next unless RailsNlp.spell_checker.correct?(word)
-        word.downcase!
-        next if STOP_WORDS.include?(word)
-        kw = Keyword.find_or_create_by(name: word)
+      clean_words = sanitized_text.split.select do |raw_word|
+        RailsNlp.spell_checker.correct?(raw_word)
+      end - stop_words
+
+      wordcounts = word_frequency(clean_words)
+
+      wordcounts.each do |word, frequency|
+        kw = Keyword.find_or_create_by(name: word.downcase)
         Wordcount.create do |wc|
           wc.analysable_id = @model.id
           wc.keyword_id = kw.id
-          wc.count = 9
+          wc.count = frequency
         end
       end
     end
 
       private
 
-      def model_text
+      def sanitized_text
         "".tap do |str|
           @fields.each do |field|
             field_contents = @model.send(field)
@@ -40,6 +43,16 @@ module RailsNlp
 
       def sanitize_html(str)
         Sanitize.clean(str)
+      end
+
+      def word_frequency(word_list)
+        word_list.each_with_object(Hash.new(0)) do |word, counts|
+          counts[word] += 1
+        end
+      end
+
+      def stop_words
+        STOP_WORDS + STOP_WORDS.map(&:capitalize)
       end
 
 
