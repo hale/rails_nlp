@@ -26,7 +26,11 @@ module RailsNlp
   end
 
   def analyse_model
-    TextAnalyser.analyse(self)
+    rails_nlp_text_analyser.analyse
+  end
+
+  def rails_nlp_text_analyser
+    @text_analyser ||= TextAnalyser.new(model: self, fields: RailsNlp.configuration.fields)
   end
 
 
