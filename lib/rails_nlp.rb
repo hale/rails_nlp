@@ -38,4 +38,12 @@ module RailsNlp
     @spell_checker ||= SpellChecker.new
   end
 
+  def self.suggest_stopwords(n: 10)
+    kws = Book.all.map(&:keywords)
+    dkw = kws.map{ |kww| kww.map(&:name) }
+    fdkw = dkw.flatten
+    freq = fdkw.each_with_object(Hash.new(0)) { |wrd,cnt| cnt[wrd] +=1 }
+    freq.sort_by { |_,count| count }[-n,n].map(&:first)
+  end
+
 end

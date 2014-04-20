@@ -13,5 +13,17 @@ module RailsNlp
       expect(model.keywords.pluck(:name)).to eq(%w(header new bit content))
     end
 
+    it "suggests stopwords" do
+      10.times do |n|
+        create(:analysable, title: "a"*n, content: "duped")
+      end
+      expect(RailsNlp.suggest_stopwords(n: 1)).to include("duped")
+    end
+
+    it "stopwords are returned when amount requested is too large" do
+      create(:analysable)
+      expect(RailsNlp.suggest_stopwords(n: 100)).to_not be_nil
+    end
+
   end
 end
