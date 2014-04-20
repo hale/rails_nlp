@@ -28,12 +28,6 @@ module RailsNlp
         expect(Keyword.pluck(:name)).to eq(["happy"])
       end
 
-      it "removes stop words" do
-        @model.should_receive(:content).and_return("the dog is a good boy")
-        TextAnalyser.new(model: @model, fields: [:content]).analyse
-        expect(Keyword.pluck(:name)).to eq(%w(dog good boy))
-      end
-
       it "skips a field if there is no content" do
         @model.should_receive(:title).and_return(nil)
         @model.should_receive(:content).and_return("hullabaloo")
@@ -62,7 +56,7 @@ module RailsNlp
       it "doesn't store words containing punctuation" do
         @model.should_receive(:content).and_return("\"Wow!\" shouted the man")
         TextAnalyser.new(model: @model, fields: [:content]).analyse
-        expect(Keyword.pluck(:name)).to eq(%w(shouted man))
+        expect(Keyword.pluck(:name)).to eq(%w(shouted the man))
       end
 
     end
