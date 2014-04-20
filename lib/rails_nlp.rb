@@ -39,11 +39,8 @@ module RailsNlp
   end
 
   def self.suggest_stopwords(n: 10)
-    kws = Book.all.map(&:keywords)
-    dkw = kws.map{ |kww| kww.map(&:name) }
-    fdkw = dkw.flatten
-    freq = fdkw.each_with_object(Hash.new(0)) { |wrd,cnt| cnt[wrd] +=1 }
-    freq.sort_by { |_,count| count }[-n,n].map(&:first)
+    freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(n).count
+    Keyword.where(id: freq.map(&:first)).pluck(:name)
   end
 
 end
