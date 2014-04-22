@@ -53,7 +53,7 @@ module RailsNlp
         25.times do |n|
           model.keywords.create(name: "a"*n)
         end
-        expect(RailsNlp.suggest_stopwords.size).to eq(3)
+        expect(RailsNlp.suggest_stopwords.size).to eq(2)
       end
     end
 

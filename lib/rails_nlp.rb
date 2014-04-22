@@ -49,7 +49,7 @@ module RailsNlp
     else
       blacklist = []
     end
-    n ||= (Keyword.count * 0.1).ceil
+    n ||= (Keyword.count * 0.1).floor
     freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(n).count
     Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
   end
