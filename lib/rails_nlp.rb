@@ -39,8 +39,18 @@ module RailsNlp
   end
 
   def self.suggest_stopwords(n: 10)
+    if RailsNlp.configuration.respond_to?(:stopwords_whitelist)
+      whitelist = RailsNlp.configuration.stopwords_whitelist
+    else
+      whitelist = []
+    end
+    if RailsNlp.configuration.respond_to?(:stopwords_blacklist)
+      blacklist = RailsNlp.configuration.stopwords_blacklist
+    else
+      blacklist = []
+    end
     freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(n).count
-    Keyword.where(id: freq.map(&:first)).pluck(:name)
+    Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
   end
 
 end

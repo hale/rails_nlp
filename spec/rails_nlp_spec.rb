@@ -13,16 +13,40 @@ module RailsNlp
       expect(model.keywords.pluck(:name)).to eq(%w(header this is a new bit of content))
     end
 
-    it "suggests stopwords" do
-      10.times do |n|
-        create(:analysable, title: "a"*n, content: "duped")
+    describe "#suggest_stopwords" do
+      it "gives most common words across all records" do
+        create(:analysable, title: "one", content: "duped")
+        create(:analysable, title: "two", content: "duped")
+        expect(RailsNlp.suggest_stopwords(n: 1)).to eq(["duped"])
       end
-      expect(RailsNlp.suggest_stopwords(n: 1)).to include("duped")
-    end
 
-    it "stopwords are returned when amount requested is too large" do
-      create(:analysable)
-      expect(RailsNlp.suggest_stopwords(n: 100)).to_not be_nil
+      it "stopwords are returned when amount requested is too large" do
+        create(:analysable)
+        expect(RailsNlp.suggest_stopwords(n: 100)).to_not be_nil
+      end
+
+      it "always suggests whitelisted words" do
+        flexmock(RailsNlp.configuration) do |m|
+          m.should_receive(:stopwords_whitelist).and_return(["horse"]).once
+        end
+        expect(RailsNlp.suggest_stopwords).to include("horse")
+      end
+
+      it "never includes blacklisted words" do
+        create(:analysable, title: "house", content: "house")
+        flexmock(RailsNlp.configuration) do |m|
+          m.should_receive(:stopwords_blacklist).and_return(["house"])
+        end
+        expect(RailsNlp.suggest_stopwords).to_not include("house")
+      end
+
+      it "whitelist takes priority over blacklist" do
+        flexmock(RailsNlp.configuration) do |m|
+          m.should_receive(:stopwords_whitelist).and_return(["house"])
+          m.should_receive(:stopwords_blacklist).and_return(["house"])
+        end
+        expect(RailsNlp.suggest_stopwords).to include("house")
+      end
     end
 
   end
