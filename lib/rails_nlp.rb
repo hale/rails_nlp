@@ -38,7 +38,7 @@ module RailsNlp
     @spell_checker ||= SpellChecker.new
   end
 
-  def self.suggest_stopwords(n: 10)
+  def self.suggest_stopwords(n: nil)
     if RailsNlp.configuration.respond_to?(:stopwords_whitelist)
       whitelist = RailsNlp.configuration.stopwords_whitelist
     else
@@ -49,6 +49,7 @@ module RailsNlp
     else
       blacklist = []
     end
+    n ||= (Keyword.count * 0.1).ceil
     freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(n).count
     Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
   end

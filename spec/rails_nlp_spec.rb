@@ -47,6 +47,14 @@ module RailsNlp
         end
         expect(RailsNlp.suggest_stopwords).to include("house")
       end
+
+      it "by default number of stopwords is 10% of Keyword.count" do
+        model = create(:analysable)
+        25.times do |n|
+          model.keywords.create(name: "a"*n)
+        end
+        expect(RailsNlp.suggest_stopwords.size).to eq(3)
+      end
     end
 
   end
