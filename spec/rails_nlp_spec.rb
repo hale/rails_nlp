@@ -57,26 +57,30 @@ module RailsNlp
       end
     end
 
-    describe "#metaphones_for model" do
+    describe "model#metaphones " do
       it "gives an array" do
         model = create(:analysable)
-        expect(RailsNlp.metaphones_for(model).class).to eq(Array)
+        expect(model.metaphones.class).to eq(Array)
       end
 
       it "size of array is equal to number of unique keywords in the model" do
         model = create(:analysable, title: "one two three", content: "four five six")
-        expect(RailsNlp.metaphones_for(model).size).to eq(6)
+        expect(model.metaphones.size).to eq(6)
       end
 
       it "does not contain duplicates" do
         model = create(:analysable, title: "one won", content: "")
-        expect(RailsNlp.metaphones_for(model).size).to eq(1)
+        expect(model.metaphones.size).to eq(1)
       end
 
       it "joins metaphones from each keyword in the model" do
         model = create(:analysable, title: "food basket", content: "")
-        expect(RailsNlp.metaphones_for(model)).to eq(["FT", "PSKT"])
+        expect(model.metaphones).to eq(["FT", "PSKT"])
       end
+    end
+
+    it "#metaphones(str) gives string of metaphones" do
+      expect(RailsNlp.metaphones("saussage roll")).to eq("SSJ RL")
     end
 
   end

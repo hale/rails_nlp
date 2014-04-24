@@ -34,6 +34,18 @@ module RailsNlp
     @text_analyser ||= TextAnalyser.new(model: self, fields: RailsNlp.configuration.fields)
   end
 
+  def metaphones
+    keywords.pluck(:metaphone).uniq
+  end
+
+  def self.metaphones(str)
+    [].tap do |metaphones|
+      str.split.each do |word|
+        metaphones << Text::Metaphone.double_metaphone(word).first
+      end
+    end.join(" ")
+  end
+
   def self.spell_checker
     @spell_checker ||= SpellChecker.new
   end
@@ -43,10 +55,6 @@ module RailsNlp
     blacklist = RailsNlp.configuration.stopwords_blacklist || []
     freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(n).count
     Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
-  end
-
-  def self.metaphones_for(model)
-    model.keywords.pluck(:metaphone).uniq
   end
 
   private
