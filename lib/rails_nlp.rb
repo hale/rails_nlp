@@ -46,21 +46,34 @@ module RailsNlp
     end.join(" ")
   end
 
+  def self.stems(str)
+    [].tap do |stems|
+      str.split.each do |word|
+        stems << Text::PorterStemming.stem(word)
+      end
+    end.join(" ")
+  end
+
   def self.spell_checker
     @spell_checker ||= SpellChecker.new
   end
 
-  def self.suggest_stopwords(n: keyword_count)
+  def self.suggest_stopwords(n: stopwords_default, n_max: stopwords_max)
     whitelist = RailsNlp.configuration.stopwords_whitelist || []
     blacklist = RailsNlp.configuration.stopwords_blacklist || []
-    freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(n).count
+    limit = [n, n_max].min
+    freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(limit).count
     Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
   end
 
   private
 
-  def self.keyword_count
+  def self.stopwords_default
     (Keyword.count * 0.1).floor
+  end
+
+  def self.stopwords_max
+    200
   end
 
 end

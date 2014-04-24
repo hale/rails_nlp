@@ -55,6 +55,14 @@ module RailsNlp
         end
         expect(RailsNlp.suggest_stopwords.size).to eq(2)
       end
+
+      it "can set a max number of stopwords" do
+        model = create(:analysable)
+        20.times do |n|
+          model.keywords.create(name: "a"*n)
+        end
+        expect(RailsNlp.suggest_stopwords(n_max: 1).size).to eq(1)
+      end
     end
 
     describe "model#metaphones " do
@@ -81,6 +89,10 @@ module RailsNlp
 
     it "#metaphones(str) gives string of metaphones" do
       expect(RailsNlp.metaphones("saussage roll")).to eq("SSJ RL")
+    end
+
+    it "#stems(str) gives string of word stems" do
+      expect(RailsNlp.stems("kicked football rolling")).to eq("kick footbal roll")
     end
 
   end
