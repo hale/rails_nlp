@@ -6,16 +6,26 @@ module RailsNlp
     it { should validate_uniqueness_of(:name)}
 
     describe "analysis of keywords before save" do
-      it "calculates the metaphone phonetic approximation of the keyword" do
-        kw = Keyword.create(name: "food")
-        expect(kw.metaphone).to_not be_nil
+      describe "phonetic" do
+        it "changes the metaphone field" do
+          kw = Keyword.create(name: "food")
+          expect(kw.metaphone).to_not be_nil
+        end
+
+        it "calculates the metaphone phonetic approximation of the keyword" do
+          kw = Keyword.create(name: "vegetable")
+          expect(kw.metaphone).to eq("FKTP")
+        end
       end
 
-      it "works on a real example" do
-        kw = Keyword.create(name: "vegetable")
-        expect(kw.metaphone).to eq("FKTP")
+      describe "stemming" do
+        it "changes the #stem field" do
+          kw = Keyword.create(name: "flailing")
+          expect(kw.stem).to eq("flail")
+        end
       end
     end
+
 
   end
 end
