@@ -11,7 +11,7 @@ module RailsNlp
     private
 
     def set_metaphone
-      self.metaphone = Text::Metaphone.metaphone(name)
+      self.metaphone = Text::Metaphone.double_metaphone(name).first
     end
   end
 end

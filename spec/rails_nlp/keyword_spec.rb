@@ -13,7 +13,7 @@ module RailsNlp
 
       it "works on a real example" do
         kw = Keyword.create(name: "vegetable")
-        expect(kw.metaphone).to eq("FJTBL")
+        expect(kw.metaphone).to eq("FKTP")
       end
     end
 
