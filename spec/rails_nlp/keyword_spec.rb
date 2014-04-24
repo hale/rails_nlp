@@ -4,6 +4,19 @@ module RailsNlp
   describe Keyword do
     it { should validate_presence_of(:name)}
     it { should validate_uniqueness_of(:name)}
+
+    describe "analysis of keywords before save" do
+      it "calculates the metaphone phonetic approximation of the keyword" do
+        kw = Keyword.create(name: "food")
+        expect(kw.metaphone).to_not be_nil
+      end
+
+      it "works on a real example" do
+        kw = Keyword.create(name: "vegetable")
+        expect(kw.metaphone).to eq("FJTBL")
+      end
+    end
+
   end
 end
 

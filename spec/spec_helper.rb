@@ -36,6 +36,7 @@ ActiveRecord::Schema.define do
 
   create_table :keywords, force: true do |t|
     t.string "name"
+    t.string "metaphone"
   end
 
   create_table :analysables, force: true do |t|

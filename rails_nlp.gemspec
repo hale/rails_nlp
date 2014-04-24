@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "sanitize", "~> 2.1"
   spec.add_runtime_dependency "activerecord", "~> 4.0"
   spec.add_runtime_dependency "ffi-hunspell", "~> 0.3.0"
+  spec.add_runtime_dependency "text", "~> 1.2.3"
 end
