@@ -38,20 +38,17 @@ module RailsNlp
     @spell_checker ||= SpellChecker.new
   end
 
-  def self.suggest_stopwords(n: nil)
-    if RailsNlp.configuration.respond_to?(:stopwords_whitelist)
-      whitelist = RailsNlp.configuration.stopwords_whitelist
-    else
-      whitelist = []
-    end
-    if RailsNlp.configuration.respond_to?(:stopwords_blacklist)
-      blacklist = RailsNlp.configuration.stopwords_blacklist
-    else
-      blacklist = []
-    end
-    n ||= (Keyword.count * 0.1).floor
+  def self.suggest_stopwords(n: keyword_count)
+    whitelist = RailsNlp.configuration.stopwords_whitelist || []
+    blacklist = RailsNlp.configuration.stopwords_blacklist || []
     freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(n).count
     Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
+  end
+
+  private
+
+  def self.keyword_count
+    (Keyword.count * 0.1).floor
   end
 
 end
