@@ -45,6 +45,10 @@ module RailsNlp
     Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
   end
 
+  def self.metaphones_for(model)
+    model.keywords.pluck(:metaphone).uniq
+  end
+
   private
 
   def self.keyword_count
