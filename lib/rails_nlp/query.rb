@@ -12,12 +12,12 @@ module RailsNlp
     end
 
     def keywords
-      (@query.split - RailsNlp.suggest_stopwords).join(" ")
+      @keywords ||= (@query.split - RailsNlp.suggest_stopwords).join(" ")
     end
 
     def metaphones
       [].tap do |metaphones|
-        @query.split.each do |word|
+        keywords.split.each do |word|
           metaphones << Text::Metaphone.double_metaphone(word).first
         end
       end.join(" ")
@@ -25,7 +25,7 @@ module RailsNlp
 
     def stems
       [].tap do |stems|
-        @query.split.each do |word|
+        keywords.split.each do |word|
           stems << Text::PorterStemming.stem(word)
         end
       end.join(" ")
