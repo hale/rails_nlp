@@ -87,12 +87,8 @@ module RailsNlp
       end
     end
 
-    it "#metaphones(str) gives string of metaphones" do
-      expect(RailsNlp.metaphones("saussage roll")).to eq("SSJ RL")
-    end
-
-    it "#stems(str) gives string of word stems" do
-      expect(RailsNlp.stems("kicked football rolling")).to eq("kick footbal roll")
+    it "#expand(str) gives a Query object" do
+      expect(RailsNlp.expand("").class).to eq(Query)
     end
 
   end

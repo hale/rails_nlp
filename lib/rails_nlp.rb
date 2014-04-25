@@ -4,6 +4,7 @@ require 'rails_nlp/text_analyser'
 require 'rails_nlp/keyword'
 require 'rails_nlp/wordcount'
 require 'rails_nlp/spell_checker'
+require 'rails_nlp/query'
 
 require 'active_support/concern'
 
@@ -38,22 +39,6 @@ module RailsNlp
     keywords.pluck(:metaphone).uniq
   end
 
-  def self.metaphones(str)
-    [].tap do |metaphones|
-      str.split.each do |word|
-        metaphones << Text::Metaphone.double_metaphone(word).first
-      end
-    end.join(" ")
-  end
-
-  def self.stems(str)
-    [].tap do |stems|
-      str.split.each do |word|
-        stems << Text::PorterStemming.stem(word)
-      end
-    end.join(" ")
-  end
-
   def self.spell_checker
     @spell_checker ||= SpellChecker.new
   end
@@ -64,6 +49,10 @@ module RailsNlp
     limit = [n, n_max].min
     freq = Wordcount.group(:keyword_id).order('count_all DESC').limit(limit).count
     Keyword.where(id: freq.map(&:first)).pluck(:name) - blacklist + whitelist
+  end
+
+  def self.expand(str)
+    Query.new(str)
   end
 
   private
