@@ -10,17 +10,17 @@ module RailsNlp
     it "#keywords gives the query sanitized, with stopwords removed" do
       flexmock(RailsNlp).should_receive(:suggest_stopwords).and_return(["penguin"])
       q = Query.new("a penguin is brown")
-      q.keywords.should eq("a is brown")
+      expect(q.keywords).to eq("a is brown")
     end
 
     it "#metaphones gives the keywords converted to metaphones" do
       q = Query.new("badger hole")
-      q.metaphones.should eq("PJR HL")
+      expect(q.metaphones).to eq("PJR HL")
     end
 
     it "#stems gives the stems of the keywords" do
       q = Query.new("switching bars")
-      q.stems.should eq("switch bar")
+      expect(q.stems).to eq("switch bar")
     end
   end
 end
