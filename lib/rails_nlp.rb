@@ -39,6 +39,10 @@ module RailsNlp
     keywords.pluck(:metaphone).uniq
   end
 
+  def stems
+    keywords.pluck(:stem).uniq
+  end
+
   def self.spell_checker
     @spell_checker ||= SpellChecker.new
   end

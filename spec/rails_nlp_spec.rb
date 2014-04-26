@@ -2,6 +2,7 @@ require 'spec_helper'
 
 module RailsNlp
   describe RailsNlp do
+    describe "#keywords" do
     it "gives a list of Keywords for this model" do
       model = create(:analysable, title: "the dog", content: "a ball")
       expect(model.keywords.pluck(:name)).to eq(%w(the dog a ball))
@@ -12,8 +13,9 @@ module RailsNlp
                      content: "\nThis is a new\tbit of content")
       expect(model.keywords.pluck(:name)).to eq(%w(header this is a new bit of content))
     end
+    end
 
-    describe "#suggest_stopwords" do
+    describe "self.suggest_stopwords" do
       it "gives most common words across all records" do
         create(:analysable, title: "one", content: "duped")
         create(:analysable, title: "two", content: "duped")
@@ -65,6 +67,28 @@ module RailsNlp
       end
     end
 
+    describe "#stems " do
+      it "gives an array" do
+        model = create(:analysable)
+        expect(model.stems.class).to eq(Array)
+      end
+
+      it "size of array is equal to number of unique keywords in the model" do
+        model = create(:analysable, title: "one two three", content: "four five six")
+        expect(model.stems.size).to eq(6)
+      end
+
+      it "does not contain duplicates" do
+        model = create(:analysable, title: "run running", content: "")
+        expect(model.stems.size).to eq(1)
+      end
+
+      it "joins stems from each keyword in the model" do
+        model = create(:analysable, title: "flippers digging", content: "")
+        expect(model.stems).to eq(["flipper", "dig"])
+      end
+    end
+
     describe "model#metaphones " do
       it "gives an array" do
         model = create(:analysable)
@@ -86,6 +110,7 @@ module RailsNlp
         expect(model.metaphones).to eq(["FT", "PSKT"])
       end
     end
+
 
     it "#expand(str) gives a Query object" do
       expect(RailsNlp.expand("").class).to eq(Query)
