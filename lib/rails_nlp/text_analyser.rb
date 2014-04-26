@@ -25,29 +25,29 @@ module RailsNlp
       end
     end
 
-      private
+    private
 
-      def sanitized_text
-        "".tap do |str|
-          @fields.each do |field|
-            field_contents = @model.send(field)
-            if field_contents
-              field_contents = sanitize_html(field_contents)
-              str << " " + field_contents
-            end
+    def sanitized_text
+      "".tap do |str|
+        @fields.each do |field|
+          field_contents = @model.send(field)
+          if field_contents
+            field_contents = sanitize_html(field_contents)
+            str << " " + field_contents
           end
         end
       end
+    end
 
-      def sanitize_html(str)
-        Sanitize.clean(str)
-      end
+    def sanitize_html(str)
+      Sanitize.clean(str)
+    end
 
-      def word_frequency(word_list)
-        word_list.each_with_object(Hash.new(0)) do |word, counts|
-          counts[word] += 1
-        end
+    def word_frequency(word_list)
+      word_list.each_with_object(Hash.new(0)) do |word, counts|
+        counts[word] += 1
       end
+    end
 
   end
 end
