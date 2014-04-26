@@ -8,6 +8,12 @@ module RailsNlp
 
     before_create :set_metaphone, :set_stem
 
+    has_many :wordcounts
+
+    scope :orphans, -> {
+      includes(:wordcounts).where('wordcounts.id IS NULL').references(:wordcounts)
+    }
+
     private
 
     def set_metaphone

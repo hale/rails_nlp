@@ -25,6 +25,12 @@ module RailsNlp
       end
     end
 
+    def update
+      @model.wordcounts.destroy_all
+      analyse
+      Keyword.orphans.destroy_all
+    end
+
     private
 
     def sanitized_text

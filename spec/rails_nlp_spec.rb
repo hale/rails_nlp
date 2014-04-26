@@ -120,5 +120,95 @@ module RailsNlp
       expect(model.rails_nlp_text_analyser.class).to eq(TextAnalyser)
     end
 
+    describe "analysed model is updated" do
+      context "an existing word occurs less than before" do
+        it "reduces Wordcount count" do
+          m = create(:analysable, title: "dog bone", content: "the dog")
+          dog_kw = Keyword.find_by(name: "dog")
+          expect {
+            m.update(title: "the bone")
+          }.to change {
+            Wordcount.find_by(keyword_id: dog_kw.id, analysable_id: m.id).count
+          }.from(2).to(1)
+        end
+      end
+
+      context "existing word occurs more than before" do
+        it "increases wordcount count for that model" do
+          m = create(:analysable, title: "dog bone", content: "the dog")
+          dog_kw = Keyword.find_by(name: "dog")
+          expect {
+            m.update(title: "dog bone dog")
+          }.to change {
+            Wordcount.find_by(keyword_id: dog_kw.id, analysable_id: m.id).count
+          }.from(2).to(3)
+        end
+      end
+
+      context "word no longer occurs, but still exists in other models" do
+        before(:each) do
+          @model_1 = create(:analysable, title: "stick")
+          @model_2 = create(:analysable, content: "stick")
+          @model_1.update_attribute(:title, "foobar")
+        end
+
+        it "model#keywords no longer contains the keyword" do
+          expect(@model_1.keywords.pluck(:name)).to_not include("stick")
+        end
+
+        it "other model's keywords still includes the word" do
+          expect(@model_2.keywords.pluck(:name)).to include("stick")
+        end
+      end
+
+      context "word no longer occurs, and is not present in any other record" do
+        it "removed the keyword from the database" do
+          model_1 = create(:analysable, content: "dog cat sheep")
+          create(:analysable, content: "dog cat")
+          model_1.update_attribute(:content, "dog bark")
+          expect(Keyword.find_by(name: "sheep")).to be_nil
+        end
+      end
+
+      context "a new word is introduced, not in any other record" do
+        it "model#keywords contains the word" do
+          m = create(:analysable, content: "walk in the park")
+          m.update(title: "pumpkin juice")
+          expect(m.keywords).to include(*Keyword.where(name: ["pumpkin", "juice"]))
+        end
+      end
+
+      context "a new word is added to the model, already exists in other records" do
+        it "model#keywords contains the word" do
+          create(:analysable, title: "one two")
+          m = create(:analysable)
+          m.update(title: "two three")
+          expect(m.keywords).to include(Keyword.find_by(name: "two"))
+        end
+      end
+
+      context "changes are not made to the analysed fields" do
+        it "does nothing" do
+          m = create(:analysable, title: "the man and his dog")
+          flexmock(RailsNlp.configuration).should_receive(:fields).and_return([])
+          flexmock(m.rails_nlp_text_analyser).should_receive(:update).never
+          m.update_attribute(:title, "the dog and his parrot")
+        end
+      end
+    end
+
+    describe "analysed model is deleted" do
+      it "removes all wordcounts associated with the model" do
+        m = create(:analysable, title: "the blue sandwich", content: "")
+        expect { m.destroy }.to change { Wordcount.count }.by(-3)
+      end
+
+      it "removes any keywords not in any other models" do
+        m = create(:analysable, title: "the blue sandwich", content: "")
+        m.destroy
+        expect(Keyword.find_by(name: "sandwich")).to be_nil
+      end
+    end
+
   end
 end

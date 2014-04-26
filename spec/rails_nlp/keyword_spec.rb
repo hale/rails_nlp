@@ -4,6 +4,7 @@ module RailsNlp
   describe Keyword do
     it { should validate_presence_of(:name)}
     it { should validate_uniqueness_of(:name)}
+    it { should have_many(:wordcounts) }
 
     describe "analysis of keywords before save" do
       describe "phonetic" do
@@ -23,6 +24,16 @@ module RailsNlp
           kw = Keyword.create(name: "flailing")
           expect(kw.stem).to eq("flail")
         end
+      end
+    end
+
+    describe "orphans scope" do
+      it "gives keywords not associated with any model" do
+        kw = Keyword.create(name: "testbed")
+        Wordcount.create(analysable_id: 1, keyword_id: kw.id, count: 1)
+        orphan = Keyword.create(name: "oliver")
+
+        expect(Keyword.orphans).to eq([orphan])
       end
     end
 

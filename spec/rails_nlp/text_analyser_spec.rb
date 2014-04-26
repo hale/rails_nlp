@@ -2,8 +2,7 @@ require 'spec_helper'
 
 module RailsNlp
   describe TextAnalyser do
-    describe "creating a keyword records" do
-
+    describe "CREATE" do
       before(:each) do
         @model = flexmock("analysable model")
         @model.should_receive(:id).and_return(1)
@@ -58,7 +57,7 @@ module RailsNlp
         TextAnalyser.new(model: @model, fields: [:content]).analyse
         expect(Keyword.pluck(:name)).to eq(%w(shouted the man))
       end
-
     end
+
   end
 end

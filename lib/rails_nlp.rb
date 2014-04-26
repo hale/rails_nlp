@@ -21,14 +21,22 @@ module RailsNlp
   end
 
   included do
-    has_many :wordcounts, class_name: RailsNlp::Wordcount, foreign_key: "analysable_id"
+    has_many :wordcounts, class_name: RailsNlp::Wordcount, foreign_key: "analysable_id", dependent: :destroy
     has_many :keywords, through: :wordcounts, class_name: RailsNlp::Keyword
 
-    after_save :analyse_model
+    after_create :rails_nlp_analyse
+    around_update :rails_nlp_update
+    after_destroy  { Keyword.orphans.destroy_all }
   end
 
-  def analyse_model
+  def rails_nlp_analyse
     rails_nlp_text_analyser.analyse
+  end
+
+  def rails_nlp_update
+    fields_changed = !!(changes.keys & RailsNlp.configuration.fields).any?
+    yield
+    rails_nlp_text_analyser.update if fields_changed
   end
 
   def rails_nlp_text_analyser
