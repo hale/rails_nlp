@@ -3,16 +3,16 @@ require 'spec_helper'
 module RailsNlp
   describe RailsNlp do
     describe "#keywords" do
-    it "gives a list of Keywords for this model" do
-      model = create(:analysable, title: "the dog", content: "a ball")
-      expect(model.keywords.pluck(:name)).to eq(%w(the dog a ball))
-    end
+      it "gives a list of Keywords for this model" do
+        model = create(:analysable, title: "the dog", content: "a ball")
+        expect(model.keywords.pluck(:name)).to eq(%w(the dog a ball))
+      end
 
-    it "keywords for model are sanitized" do
-      model = create(:analysable, title: "<h1>Header</h1><!-- msg -->",
-                     content: "\nThis is a new\tbit of content")
-      expect(model.keywords.pluck(:name)).to eq(%w(header this is a new bit of content))
-    end
+      it "keywords for model are sanitized" do
+        model = create(:analysable, title: "<h1>Header</h1><!-- msg -->",
+                       content: "\nThis is a new\tbit of content")
+        expect(model.keywords.pluck(:name)).to eq(%w(header this is a new bit of content))
+      end
     end
 
     describe "self.suggest_stopwords" do
@@ -89,7 +89,7 @@ module RailsNlp
       end
     end
 
-    describe "model#metaphones " do
+    describe "#metaphones " do
       it "gives an array" do
         model = create(:analysable)
         expect(model.metaphones.class).to eq(Array)
@@ -111,9 +111,13 @@ module RailsNlp
       end
     end
 
-
-    it "#expand(str) gives a Query object" do
+    it "self.expand(str) gives a Query object" do
       expect(RailsNlp.expand("").class).to eq(Query)
+    end
+
+    it "#text_analyser gives a TextAnalyser object" do
+      model = create(:analysable)
+      expect(model.rails_nlp_text_analyser.class).to eq(TextAnalyser)
     end
 
   end
