@@ -22,5 +22,31 @@ module RailsNlp
       q = Query.new("switching bars")
       expect(q.stems).to eq("switch bar")
     end
+
+    describe "#correct?" do
+      it "true when every word in query is correctly spelled English word" do
+        q = Query.new("i can spell like a champion")
+        expect(q.correct?).to eq(true)
+      end
+
+      it "false when any word is not English word" do
+        q = Query.new("unfortunately mytyping is bad")
+        expect(q.correct?).to eq(false)
+      end
+    end
+
+    describe "#corrected" do
+      it "only suggests words that are in the database" do
+        FactoryGirl.create(:analysable, content: "How to clean the sticky keys your keyboard has")
+        q = Query.new("My keyboardd haas stickyy keysy")
+        expect(q.corrected).to eq("My keyboard has sticky keys")
+      end
+
+      it "does not try and correct English words that are not in the database" do
+        q = Query.new("This is all correct")
+        expect(q.corrected).to eq("This is all correct")
+      end
+
+    end
   end
 end

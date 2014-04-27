@@ -31,5 +31,18 @@ module RailsNlp
       end.join(" ")
     end
 
+    def correct?
+      @query.split.all? { |term| RailsNlp.spell_checker.correct?(term) }
+    end
+
+    def corrected
+      @corrected ||= "".tap do |corrected|
+        @query.split.each do |term|
+          corrected << RailsNlp.spell_checker.suggest(term)
+          corrected << " "
+        end
+      end.strip
+    end
+
   end
 end
