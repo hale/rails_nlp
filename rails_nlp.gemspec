@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "flexmock", "~> 1.3.1"
   spec.add_development_dependency "shoulda-matchers", "~> 2.6.0"
   spec.add_development_dependency "codeclimate-test-reporter"
+  spec.add_development_dependency "sqlite3"
 
   spec.add_runtime_dependency "facets", "~> 2.9"
   spec.add_runtime_dependency "sanitize", "~> 2.1"
