@@ -1,5 +1,5 @@
-Rails NLP
-====
+Rails NLP [![Code Climate](https://codeclimate.com/github/hale/rails_nlp.png)](https://codeclimate.com/github/hale/rails_nlp) [![Code Climate](https://codeclimate.com/github/hale/rails_nlp/coverage.png)](https://codeclimate.com/github/hale/rails_nlp)
+===
 
 Add Rails NLP to your Rails project to allow deeper full-text search across
 your ActiveRecord models.
