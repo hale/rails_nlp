@@ -10,7 +10,6 @@ require 'shoulda/matchers'
 
 RSpec.configure do |config|
   config.order = "random"
-  config.color_enabled = true
   config.tty = true
   config.mock_with :flexmock
   config.include FactoryGirl::Syntax::Methods
@@ -41,6 +40,7 @@ ActiveRecord::Schema.define do
     t.string "name"
     t.string "metaphone"
     t.string "stem"
+    t.text "synonyms"
   end
 
   create_table :analysables, force: true do |t|

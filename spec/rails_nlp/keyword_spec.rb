@@ -25,6 +25,13 @@ module RailsNlp
           expect(kw.stem).to eq("flail")
         end
       end
+
+      describe "synonym generation" do
+        it "changes the #synonyms field" do
+          kw = Keyword.create(name: "fish")
+          expect(kw.synonyms.class).to eq(Array)
+        end
+      end
     end
 
     describe "orphans scope" do
