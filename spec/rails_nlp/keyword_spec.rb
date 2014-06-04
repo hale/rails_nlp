@@ -27,9 +27,19 @@ module RailsNlp
       end
 
       describe "synonym generation" do
+
         it "changes the #synonyms field" do
           kw = Keyword.create(name: "fish")
           expect(kw.synonyms.class).to eq(Array)
+        end
+
+        it "sets the #synonyms to be an array of synonyms" do
+          flexmock(BrontoGem).should_receive(:lookup).with("cat").and_return({
+            noun: { syn: ["adult female", "adult male"]},
+            verb: { syn: ["barf", "cast", "chuck"]}
+          })
+          kw = Keyword.create(name: "cat")
+          expect(kw.synonyms).to eq(%w(adult\ female adult\ male barf cast chuck))
         end
       end
     end

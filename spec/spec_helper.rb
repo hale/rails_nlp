@@ -19,6 +19,9 @@ RSpec.configure do |config|
       raise ActiveRecord::Rollback
     end
   end
+  config.before(:all) do
+    flexmock(BrontoGem).should_receive(:lookup).and_return({}).by_default
+  end
 end
 
 ActiveRecord::Base.establish_connection(
