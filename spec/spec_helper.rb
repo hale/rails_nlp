@@ -8,6 +8,9 @@ require 'factory_girl_rails'
 require_relative 'factories.rb'
 require 'shoulda/matchers'
 
+require 'bronto'
+
+
 RSpec.configure do |config|
   config.order = "random"
   config.tty = true
@@ -19,9 +22,9 @@ RSpec.configure do |config|
       raise ActiveRecord::Rollback
     end
   end
-  config.before(:all) do
-    flexmock(BrontoGem).should_receive(:lookup).and_return({}).by_default
-  end
+  #config.before(:all) do
+  #  flexmock(BrontoGem).should_receive(:lookup).and_return({}).by_default
+  #end
 end
 
 ActiveRecord::Base.establish_connection(
