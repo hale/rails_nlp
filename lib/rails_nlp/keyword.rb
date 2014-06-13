@@ -1,6 +1,6 @@
 require 'active_record'
 require 'text'
-require 'bronto-gem'
+require 'bronto'
 
 module RailsNlp
   class Keyword < ActiveRecord::Base
@@ -28,7 +28,8 @@ module RailsNlp
     end
 
     def set_synonyms
-      self.synonyms = BrontoGem.lookup(name)
+      @thesaurus ||= Bronto::Thesaurus.new
+      self.synonyms = @thesaurus.lookup(name)
     end
   end
 end
