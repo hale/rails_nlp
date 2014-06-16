@@ -10,7 +10,6 @@ require 'shoulda/matchers'
 
 RSpec.configure do |config|
   config.order = "random"
-  config.color_enabled = true
   config.tty = true
   config.mock_with :flexmock
   config.include FactoryGirl::Syntax::Methods
