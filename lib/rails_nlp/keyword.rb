@@ -1,6 +1,9 @@
 require 'active_record'
 require 'text'
 
+# tests pass. uncomment the next line and watch tests fail.
+# require 'bronto'
+
 module RailsNlp
   class Keyword < ActiveRecord::Base
     validates_presence_of :name
